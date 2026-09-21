@@ -1,0 +1,8 @@
+node_modules/
+.next/
+out/
+storybook-static/
+coverage/
+.env*
+!.env.example
+.DS_Store
