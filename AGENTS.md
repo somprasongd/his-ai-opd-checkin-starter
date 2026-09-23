@@ -42,6 +42,7 @@ While implementing:
 - Do not modify unrelated files.
 - Do not introduce a dependency unless it is necessary and explicitly explain why.
 - Do not commit, push, merge, or force-update branches unless the human explicitly requests it.
+- Stop any background process you started — dev server, Storybook, `http.server`, anything bound to a port — before the turn ends. A port you leave bound will block the next session from binding it again.
 
 ## Component + Storybook rule
 
