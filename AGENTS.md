@@ -72,6 +72,7 @@ Interactive behavior should have a readable Storybook interaction scenario when 
 - Never use real patient information.
 - Reuse `src/mocks` and `src/services` before inventing a new data layer.
 - Keep scenarios reproducible: normal, slow, empty, and error where appropriate.
+- Each mock state must be demonstrable in Storybook. Do not add debug UI, scenario-switcher buttons, or URL params for changing mock state on production pages — demo controls belong in Storybook only, where end users will never see them.
 
 ## Human-review surfaces
 
