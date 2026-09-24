@@ -20,13 +20,13 @@ It is designed for PM, BA, and Product Design learners who use an AI coding agen
 - npm
 - VS Code or your team editor
 - Chrome/Edge DevTools
-- Codex CLI or Claude Code
+- A coding agent that can read and edit this local folder (for example, Codex or Claude Code)
 - GitHub account and/or access to your company GitLab
 
 ## Start
 
 ```bash
-npm install
+npm ci
 npm run dev
 ```
 
@@ -54,7 +54,13 @@ Read:
 
 `docs/requirements/US-001-opd-checkin.md`
 
-Do **not** begin by asking the agent to “build the whole page”. Ask it to read `AGENTS.md`, inspect the repository, identify components/states/files, and propose a plan before implementation.
+Do **not** begin by asking the agent to “build the whole page”. Ask it to read `AGENTS.md`, inspect the repository, identify components/states/files, and propose a plan before implementation. This starter deliberately contains a placeholder page, a TrainingNotice story, and a mock search service. PatientSearch, the check-in flow, and their Storybook stories are learner work, not prebuilt features.
+
+The image at `docs/design/opd-check-in-reference.png` is a **visual reference only**. The requirement defines behavior, including the preview/confirmation step absent from the image. Synthetic names and numbers in the image illustrate layout; the versioned mock data and requirement are the source for repeatable acceptance examples.
+
+## Capstone follow-up
+
+After the original US-001 MR has been merged, read `docs/capstone/clinic-availability.md`. It presents a new, small problem in the same check-in flow: a clinic may be unavailable. Learners write a new issue and ACs, then add deterministic mock states, Storybook evidence, a focused implementation, and regression proof for US-001. Use a new branch/worktree and Draft MR linked to the original work. This brief does not provide a prebuilt solution.
 
 ## Worktree convention
 
@@ -64,16 +70,20 @@ git switch main
 git pull
 
 git worktree add ../wt-us001-patient-checkin \
-  -b feature/us001-patient-checkin main
+  -b feature/12-us001-patient-checkin main
 
 cd ../wt-us001-patient-checkin
 git status
-npm install
+npm ci
 ```
 
 Training convention:
 
-> 1 Issue = 1 Branch = 1 Worktree = 1 Agent Session
+> 1 Issue = 1 Branch = 1 Worktree
+
+You can resume the same issue and worktree in later agent sessions. Reopen the issue and inspect the current diff before continuing.
+
+`12` is an example issue number. Replace it with your own issue number everywhere: branch name, commit footer (`Refs #12`), and MR body (`Closes #12`). Start from a clean `main`; the worktree directory can keep the neutral `wt-us001-patient-checkin` name.
 
 ## GitLab self-hosted
 
