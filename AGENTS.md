@@ -9,6 +9,7 @@ This repository is a training sandbox for PM, BA, and Product Design learners. T
 ## Product scope
 
 The continuous training scenario is **US-001 OPD Patient Check-in Lite** in `docs/requirements/US-001-opd-checkin.md`.
+The capstone is a separate, bounded follow-up issue in the same check-in flow. Its brief is `docs/capstone/clinic-availability.md`. Add clinic availability behavior only after the original US-001 work has been merged; preserve its acceptance criteria.
 
 The training scope is frontend only:
 - Next.js + TypeScript
@@ -112,7 +113,7 @@ Also confirm relevant Storybook stories and the running flow manually when the t
 
 Training convention:
 
-**1 Issue = 1 Branch = 1 Worktree = 1 Agent Session**
+**1 Issue = 1 Branch = 1 Worktree.** Resume the same issue and worktree across agent sessions when needed; inspect the issue and current diff before continuing.
 
 Never modify `main` directly for feature work. Never use force push as part of normal training guidance.
 
@@ -132,3 +133,5 @@ Before handoff, help the human understand:
 - `npm run lint`, `npm run test`, and `npm run build` pass.
 - The human has reviewed Storybook, the running app, and `git diff`.
 - The branch is ready for a Draft Pull/Merge Request and developer review.
+
+For the capstone follow-up, also prove the new availability behavior and record regression evidence for US-001. Use a new issue number, branch/worktree, commits, and Draft MR linked to the original work.

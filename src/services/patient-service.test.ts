@@ -12,6 +12,11 @@ describe('searchPatients mock service', () => {
     await expect(searchPatients('65000123', 'empty')).resolves.toEqual([]);
   });
 
+  it('returns multiple stable matches by patient name', async () => {
+    const result = await searchPatients('Jaidee');
+    expect(result.map((patient) => patient.hn)).toEqual(['65000123', '65000456']);
+  });
+
   it('supports an error scenario', async () => {
     await expect(searchPatients('65000123', 'error')).rejects.toThrow('Synthetic patient search error');
   });
