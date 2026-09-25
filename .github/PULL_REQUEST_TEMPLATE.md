@@ -1,6 +1,6 @@
 ## What
 
-Describe the product change and the issue/user story.
+Describe the product change and the issue.
 
 ## Implemented
 

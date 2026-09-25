@@ -1,6 +1,8 @@
 # US-001 — OPD Patient Check-in Lite
 
-## User Story
+> A Thai companion translation is at `US-001-opd-checkin-th.md`. This English document is authoritative if they ever disagree.
+
+## Requirement
 
 As an OPD staff member, I want to find an existing patient and check the patient in so that the patient can enter the clinic queue.
 

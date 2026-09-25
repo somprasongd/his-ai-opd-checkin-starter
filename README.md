@@ -54,6 +54,8 @@ Read:
 
 `docs/requirements/US-001-opd-checkin.md`
 
+A Thai companion translation is at `docs/requirements/US-001-opd-checkin-th.md`; the English file is authoritative if they ever disagree.
+
 Do **not** begin by asking the agent to “build the whole page”. Ask it to read `AGENTS.md`, inspect the repository, identify components/states/files, and propose a plan before implementation. This starter deliberately contains a placeholder page, a TrainingNotice story, and a mock search service. PatientSearch, the check-in flow, and their Storybook stories are learner work, not prebuilt features.
 
 The image at `docs/design/opd-check-in-reference.png` is a **visual reference only**. The requirement defines behavior, including the preview/confirmation step absent from the image. Synthetic names and numbers in the image illustrate layout; the versioned mock data and requirement are the source for repeatable acceptance examples.

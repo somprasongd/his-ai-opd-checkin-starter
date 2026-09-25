@@ -9,6 +9,7 @@ This repository is a training sandbox for PM, BA, and Product Design learners. T
 ## Product scope
 
 The continuous training scenario is **US-001 OPD Patient Check-in Lite** in `docs/requirements/US-001-opd-checkin.md`.
+A Thai companion translation is `docs/requirements/US-001-opd-checkin-th.md`; the English file is authoritative if they ever disagree.
 The capstone is a separate, bounded follow-up issue in the same check-in flow. Its brief is `docs/capstone/clinic-availability.md`. Add clinic availability behavior only after the original US-001 work has been merged; preserve its acceptance criteria.
 
 The training scope is frontend only:
