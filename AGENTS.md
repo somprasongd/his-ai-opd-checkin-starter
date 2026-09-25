@@ -122,6 +122,8 @@ Carry the issue number through every checkpoint (example: issue `12`):
 - **Commit message** — Conventional Commits style `type(scope): short imperative subject` with types such as `feat`, `fix`, `docs`, `test`, `refactor`, `chore`, e.g. `feat(us001): add PatientSearch`; end the message with a `Refs #<issue-number>` footer line, e.g. `Refs #12`.
 - **MR body** — include `Closes #<issue-number>`, e.g. `Closes #12`.
 
+The worktree directory keeps a neutral `wt-<slug>` name without the issue number, e.g. `../wt-us001-patient-checkin`; only the branch, commit footer, and MR body carry the issue number.
+
 Never modify `main` directly for feature work. Never use force push as part of normal training guidance.
 
 Before handoff, help the human understand:
