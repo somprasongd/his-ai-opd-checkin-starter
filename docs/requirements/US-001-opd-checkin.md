@@ -1,87 +1,192 @@
-# US-001 — OPD Patient Check-in Lite
+# US-001 — OPD Patient Check-in (Lite)
 
-> A Thai companion translation is at `US-001-opd-checkin-th.md`. This English document is authoritative if they ever disagree.
+> A Thai companion translation is available at `US-001-opd-checkin-th.md`. This English document is authoritative if the two versions ever disagree.
 
-## Requirement
+## User Story
 
-As an OPD staff member, I want to find an existing patient and check the patient in so that the patient can enter the clinic queue.
+As an OPD staff member, I want to find an existing patient and check the patient in to a clinic so that the patient can enter the clinic queue.
+
+## Context
+
+OPD staff need to find an existing patient, select a clinic, review the information before confirmation, and complete Check-in.
+
+This User Story uses synthetic/mock data only. It does not connect to a real HIS or queue system.
+
+## In Scope
+
+- Search for an existing patient by HN or patient name.
+- Display matching patient results.
+- Select one patient.
+- Select a Clinic.
+- Enter an optional Chief Complaint.
+- Preview the information before confirmation.
+- Go back and edit the information before confirmation.
+- Show a Success state after Check-in.
+- Support Loading, Empty, Error, and Validation states.
+- Support keyboard use and narrow mobile viewports for the primary flow.
 
 ## Acceptance Criteria
 
-1. Search an existing patient by HN or patient name.
-2. Show a Loading state while searching.
-3. Show an Empty state when no patient is found.
-4. Show an Error state when the search fails.
-5. Show multiple matching patients when applicable.
-6. Allow the user to select one patient.
-7. Show selected-patient details: HN, name, date of birth, gender.
-8. Clinic is required before Check-in can continue.
-9. Chief Complaint is optional.
-10. Show a Preview / Confirmation step before final Check-in.
-11. Allow the user to go back and edit before confirming.
-12. Final confirmation shows a Success state with a synthetic queue number such as `A012`.
-13. Search, patient selection, clinic, Back, and Confirm have visible labels/focus and work with a keyboard.
-14. The page remains usable at a narrow mobile viewport without horizontal scrolling or hidden primary actions.
+### Search
 
-## Checkable training examples
+**AC1 — Search patient**
 
-- Entering HN `65000123` finds synthetic patient **Somchai Jaidee**. Searching `Jaidee` returns multiple synthetic patients; the user must choose one before continuing.
-- Empty text is not a patient search. A query with no match shows Empty; a simulated service failure shows Error with a way to retry. Loading is visible for a deliberately slow mock response.
-- After selecting a patient, show HN, full name, date of birth, and gender from `src/mocks/patients.ts`. Do not derive age from the reference screenshot.
-- A clinic must be selected before the user can move to Preview. Chief Complaint can be blank. Preview shows the selected patient, clinic, and complaint (if entered).
-- Back from Preview preserves the selected patient and entered values. Final confirmation produces a synthetic success receipt with queue `A012`; starting another check-in resets the form.
-- The application and Storybook must demonstrate these states with deterministic mock data. No real patient lookup, queue allocation, or clinical system write occurs.
+The user can search for an existing patient by HN or patient name.
 
-The visual reference under `docs/design/` guides layout and visual hierarchy. It omits the confirmation screen and is not a behavior specification. Where it disagrees with this document or the versioned mock records, use this document for behavior and the mock records for acceptance data.
+For the defined mock data:
 
-## Suggested Product Components
+- Searching HN `65000123` finds **Somchai Jaidee**.
+- Searching `Jaidee` returns more than one matching patient.
 
-Do not treat this list as an implementation order. The learner and AI agent should review whether each boundary is useful.
+An empty query is not considered a patient search.
 
-- `PatientSearch`
-- `PatientSearchResult`
-- `PatientCard`
-- `SelectedPatient`
-- `CheckInForm`
-- `CheckInConfirmation`
-- `CheckInSuccess`
+---
 
-## Meaningful UI States
+**AC2 — Loading state**
 
-### PatientSearch
-- Default
-- Loading
-- Empty
-- WithResults
-- Error
+While waiting for search results, the application must show a visible Loading state.
 
-### PatientCard / Result
-- Default
-- Selected
-- Long name / optional-data edge case
+---
 
-### CheckInForm
-- Default
-- ValidationError
-- ReadyToSubmit
+**AC3 — Empty state**
 
-### Confirmation
-- Default
-- Submitting
-- Error (if simulated)
+When a search completes with no matching patient, the application must show an Empty state that clearly communicates that no result was found.
+
+---
+
+**AC4 — Error state**
+
+When the search fails, the application must show an Error state and provide a way for the user to retry.
+
+---
+
+### Patient Selection
+
+**AC5 — Multiple results**
+
+When more than one patient matches the query, the application must show the matching patients so the user can choose one.
+
+---
+
+**AC6 — Select patient**
+
+The user can select one patient at a time.
+
+---
+
+**AC7 — Selected patient details**
+
+After a patient is selected, the application must show at least:
+
+- HN
+- Full name
+- Date of birth
+- Gender
+
+The displayed values must come directly from the mock patient record.
+
+---
+
+### Check-in Form
+
+**AC8 — Clinic required**
+
+A Clinic must be selected before the user can continue to Preview.
+
+If no Clinic is selected, the application must show a clear Validation state.
+
+---
+
+**AC9 — Chief Complaint optional**
+
+Chief Complaint is optional and may be left blank.
+
+---
+
+### Preview and Confirmation
+
+**AC10 — Preview before confirmation**
+
+Before Check-in is completed, the application must provide a Preview step showing at least:
+
+- Selected patient
+- Clinic
+- Chief Complaint, when entered
+
+The user must confirm from the Preview step before Check-in is considered complete.
+
+---
+
+**AC11 — Back and edit**
+
+From Preview, the user can go back and edit the information.
+
+When returning to the Check-in form:
+
+- The selected patient remains selected.
+- The selected Clinic remains selected.
+- The entered Chief Complaint remains unchanged.
+
+---
 
 ### Success
-- Success
 
-## Data Rule
+**AC12 — Successful check-in**
 
-Use only mock/synthetic data supplied by this repository or invented synthetic data. Never use real patient information.
+After the user confirms the Check-in successfully, the application must show a Success state with the synthetic queue number:
+
+`A012`
+
+When the user starts another Check-in, the previous form state must be reset.
+
+---
+
+### Accessibility and Responsive Behaviour
+
+**AC13 — Keyboard accessibility**
+
+The primary flow controls, including:
+
+- Search
+- Patient selection
+- Clinic selection
+- Back
+- Confirm
+
+must have understandable labels, a visible focus state, and be operable using a keyboard.
+
+---
+
+**AC14 — Mobile usability**
+
+The primary flow must remain usable on a narrow mobile viewport:
+
+- The page must not require horizontal scrolling.
+- Primary actions must remain visible and accessible.
+
+## Data Rules
+
+Use only synthetic/mock data supplied by the repository or synthetic data created specifically for this User Story.
+
+Never use real patient information.
+
+The mock data must support at least:
+
+- HN `65000123` → Somchai Jaidee
+- Searching `Jaidee` → more than one patient
+- Empty search result
+- Search failure
+- Delayed response for demonstrating the Loading state
 
 ## Out of Scope
 
+This User Story does not include:
+
 - Backend implementation
-- Database schema or SQL
-- Real HIS integration
-- Authentication / authorization implementation
+- Database or SQL
+- HIS integration
+- Real queue allocation or queue management
+- Authentication / Authorization
 - FHIR integration
+- Writing data to a real clinical system
 - Production deployment

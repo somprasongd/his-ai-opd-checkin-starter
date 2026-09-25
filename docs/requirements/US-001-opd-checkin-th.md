@@ -1,87 +1,192 @@
-# US-001 — OPD Patient Check-in Lite (ฉบับภาษาไทย)
+# US-001 — OPD Patient Check-in (Lite)
 
-> ฉบับแปลภาษาไทยของ `US-001-opd-checkin.md` กรณีสองฉบับมีเนื้อหาต่างกัน ให้ถือฉบับภาษาอังกฤษเป็นหลัก
+> เอกสารฉบับภาษาอังกฤษอยู่ที่ `US-001-opd-checkin.md` และถือเป็นฉบับอ้างอิงหลัก หากเนื้อหาระหว่างสองเวอร์ชันไม่ตรงกัน ให้ยึดฉบับภาษาอังกฤษ
 
-## Requirement
+## User Story
 
-ในฐานะเจ้าหน้าที่ OPD ฉันต้องการค้นหาผู้ป่วยเดิมและทำ check-in ให้ผู้ป่วยรายนั้น เพื่อให้ผู้ป่วยเข้าคิวของคลินิกได้
+ในฐานะเจ้าหน้าที่ OPD ฉันต้องการค้นหาผู้ป่วยเดิมและทำ Check-in เข้าคลินิก เพื่อให้ผู้ป่วยสามารถเข้าสู่ Clinic Queue ได้
+
+## Context
+
+เจ้าหน้าที่ OPD ต้องสามารถค้นหาผู้ป่วยเดิม เลือก Clinic ตรวจสอบข้อมูลก่อน Confirm และทำ Check-in ให้เสร็จสมบูรณ์
+
+User Story นี้ใช้เฉพาะ synthetic/mock data เท่านั้น และไม่มีการเชื่อมต่อกับ HIS หรือ Queue System จริง
+
+## In Scope
+
+- ค้นหาผู้ป่วยเดิมด้วย HN หรือชื่อผู้ป่วย
+- แสดง Patient Result ที่ตรงกับคำค้นหา
+- เลือกผู้ป่วยได้หนึ่งคน
+- เลือก Clinic
+- กรอก Chief Complaint ได้ โดยเป็นข้อมูล optional
+- แสดง Preview ก่อน Confirm
+- สามารถ Back กลับไปแก้ไขข้อมูลก่อน Confirm
+- แสดง Success state หลัง Check-in สำเร็จ
+- รองรับ Loading, Empty, Error และ Validation states
+- รองรับการใช้งานด้วย Keyboard และ Narrow Mobile Viewport สำหรับ Primary Flow
 
 ## Acceptance Criteria
 
-1. ค้นหาผู้ป่วยเดิมด้วย HN หรือชื่อผู้ป่วย
-2. แสดง state Loading ระหว่างค้นหา
-3. แสดง state Empty เมื่อไม่พบผู้ป่วย
-4. แสดง state Error เมื่อค้นหาไม่สำเร็จ
-5. เมื่อมีผู้ป่วยตรงเงื่อนไขหลายราย ต้องแสดงให้เลือกได้ครบทุกราย
-6. ให้ผู้ใช้เลือกผู้ป่วยได้ครั้งละหนึ่งราย
-7. แสดงรายละเอียดของผู้ป่วยที่เลือก: HN, ชื่อ, วันเกิด และเพศ
-8. ต้องเลือก clinic ก่อนจะทำ Check-in ต่อได้
-9. Chief Complaint เป็นช่องที่เว้นว่างได้
-10. มีขั้นตอน Preview / Confirmation ก่อน Check-in ขั้นสุดท้าย
-11. ให้ผู้ใช้ย้อนกลับมาแก้ไขก่อนกดยืนยันได้
-12. เมื่อยืนยันสำเร็จ แสดง state Success พร้อมเลขคิวจำลอง เช่น `A012`
-13. ช่องค้นหา การเลือกผู้ป่วย การเลือก clinic ปุ่ม Back และ Confirm ต้องมี label/focus ที่มองเห็นได้ และใช้งานด้วย keyboard ได้
-14. หน้าจอยังใช้งานได้บนจอมือถือแคบ โดยไม่เกิดการเลื่อนแนวนอน และปุ่มหลักไม่ถูกซ่อน
+### Search
 
-## Checkable training examples
+**AC1 — Search patient**
 
-- กรอก HN `65000123` ต้องพบผู้ป่วยจำลอง **Somchai Jaidee** การค้นหาด้วย `Jaidee` ต้องได้ผู้ป่วยจำลองหลายราย และผู้ใช้ต้องเลือกหนึ่งรายก่อนไปต่อ
-- ช่องว่างไม่ใช่การค้นหาผู้ป่วย การค้นหาที่ไม่มีผลลัพธ์ต้องแสดง Empty การจำลอง service ล้มเหลวต้องแสดง Error พร้อมทาง retry ส่วน Loading ต้องมองเห็นได้จาก mock response ที่หน่วงเวลาไว้โดยเจตนา
-- หลังเลือกผู้ป่วย แสดง HN, ชื่อเต็ม, วันเกิด และเพศ จาก `src/mocks/patients.ts` ห้ามอนุมานอายุจากภาพอ้างอิง
-- ต้องเลือก clinic ก่อนจะไปหน้า Preview ได้ และ Chief Complaint เว้นว่างได้ หน้า Preview แสดงผู้ป่วยที่เลือก clinic และอาการ (ถ้ากรอก)
-- การกด Back จาก Preview ต้องคงผู้ป่วยที่เลือกและค่าที่กรอกไว้ การยืนยันขั้นสุดท้ายต้องได้ใบยืนยันจำลองพร้อมเลขคิว `A012` และการเริ่ม check-in รายใหม่ต้อง reset ฟอร์ม
-- ทั้งแอปพลิเคชันและ Storybook ต้องแสดง state เหล่านี้ด้วย mock data แบบ deterministic โดยไม่มีการค้นหาผู้ป่วยจริง การจัดสรรคิวจริง หรือการเขียนข้อมูลลงระบบคลินิกใด ๆ
+ผู้ใช้สามารถค้นหาผู้ป่วยเดิมด้วย HN หรือชื่อผู้ป่วยได้
 
-ภาพอ้างอิงที่ `docs/design/` ใช้กำกับเฉพาะ layout และ visual hierarchy ภาพไม่ได้แสดงหน้า confirmation และไม่ใช่ข้อกำหนดพฤติกรรม หากภาพขัดกับเอกสารนี้หรือ mock records ที่กำหนดเวอร์ชันไว้ ให้ใช้เอกสารนี้เรื่องพฤติกรรม และใช้ mock records เป็นค่าสำหรับการตรวจ
+สำหรับ mock data ที่กำหนด:
 
-## Suggested Product Components
+- ค้นหา HN `65000123` ต้องพบ **Somchai Jaidee**
+- ค้นหา `Jaidee` ต้องพบผู้ป่วยที่ตรงกับคำค้นหามากกว่าหนึ่งคน
 
-รายการนี้ไม่ใช่ลำดับการ implement ผู้เรียนและ AI agent ควรทบทวนว่าขอบเขตของแต่ละตัวมีประโยชน์หรือไม่
+Empty query ไม่ถือเป็นการค้นหาผู้ป่วย
 
-- `PatientSearch`
-- `PatientSearchResult`
-- `PatientCard`
-- `SelectedPatient`
-- `CheckInForm`
-- `CheckInConfirmation`
-- `CheckInSuccess`
+---
 
-## Meaningful UI States
+**AC2 — Loading state**
 
-### PatientSearch
-- Default
-- Loading
-- Empty
-- WithResults
-- Error
+ระหว่างรอ Search Result ระบบต้องแสดง Loading state ที่ผู้ใช้มองเห็นได้ชัดเจน
 
-### PatientCard / Result
-- Default
-- Selected
-- Long name / optional-data edge case
+---
 
-### CheckInForm
-- Default
-- ValidationError
-- ReadyToSubmit
+**AC3 — Empty state**
 
-### Confirmation
-- Default
-- Submitting
-- Error (if simulated)
+เมื่อ Search เสร็จแล้วไม่พบผู้ป่วยที่ตรงกับคำค้นหา ระบบต้องแสดง Empty state ที่สื่อความหมายชัดเจนว่าไม่พบข้อมูล
+
+---
+
+**AC4 — Error state**
+
+เมื่อ Search ล้มเหลว ระบบต้องแสดง Error state และมีวิธีให้ผู้ใช้ Retry ได้
+
+---
+
+### Patient Selection
+
+**AC5 — Multiple results**
+
+เมื่อมีผู้ป่วยตรงกับคำค้นหามากกว่าหนึ่งคน ระบบต้องแสดงรายการผู้ป่วยที่ตรงกับผลการค้นหา เพื่อให้ผู้ใช้เลือก
+
+---
+
+**AC6 — Select patient**
+
+ผู้ใช้สามารถเลือกผู้ป่วยได้ครั้งละหนึ่งคน
+
+---
+
+**AC7 — Selected patient details**
+
+หลังเลือกผู้ป่วย ระบบต้องแสดงข้อมูลอย่างน้อย:
+
+- HN
+- Full name
+- Date of birth
+- Gender
+
+ค่าที่แสดงต้องมาจาก mock patient record โดยตรง
+
+---
+
+### Check-in Form
+
+**AC8 — Clinic required**
+
+ผู้ใช้ต้องเลือก Clinic ก่อนจึงจะสามารถไปยัง Preview ได้
+
+หากยังไม่ได้เลือก Clinic ระบบต้องแสดง Validation state ที่เข้าใจได้ชัดเจน
+
+---
+
+**AC9 — Chief Complaint optional**
+
+Chief Complaint เป็นข้อมูล optional และสามารถเว้นว่างได้
+
+---
+
+### Preview and Confirmation
+
+**AC10 — Preview before confirmation**
+
+ก่อน Check-in เสร็จสมบูรณ์ ระบบต้องมี Preview step ที่แสดงอย่างน้อย:
+
+- ผู้ป่วยที่เลือก
+- Clinic
+- Chief Complaint เมื่อมีการกรอก
+
+ผู้ใช้ต้อง Confirm จาก Preview step ก่อนจึงจะถือว่า Check-in เสร็จสมบูรณ์
+
+---
+
+**AC11 — Back and edit**
+
+จาก Preview ผู้ใช้สามารถ Back กลับไปแก้ไขข้อมูลได้
+
+เมื่อกลับมายัง Check-in form:
+
+- ผู้ป่วยที่เลือกต้องยังคงถูกเลือกอยู่
+- Clinic ที่เลือกต้องยังคงอยู่
+- Chief Complaint ที่กรอกไว้ต้องไม่สูญหาย
+
+---
 
 ### Success
-- Success
 
-## Data Rule
+**AC12 — Successful check-in**
 
-ใช้เฉพาะ mock/synthetic data ที่ repository นี้จัดเตรียมไว้ หรือ synthetic data ที่สร้างขึ้นใหม่เท่านั้น ห้ามใช้ข้อมูลผู้ป่วยจริงทุกกรณี
+หลังจากผู้ใช้ Confirm Check-in สำเร็จ ระบบต้องแสดง Success state พร้อมเลข Queue จำลอง:
+
+`A012`
+
+เมื่อผู้ใช้เริ่ม Check-in รายการใหม่ Form state จากรายการก่อนหน้าต้องถูก Reset
+
+---
+
+### Accessibility and Responsive Behaviour
+
+**AC13 — Keyboard accessibility**
+
+Control หลักของ Flow ได้แก่:
+
+- Search
+- Patient selection
+- Clinic selection
+- Back
+- Confirm
+
+ต้องมี Label ที่เข้าใจได้ มี Visible Focus state และสามารถใช้งานด้วย Keyboard ได้
+
+---
+
+**AC14 — Mobile usability**
+
+Primary Flow ต้องยังใช้งานได้บน Narrow Mobile Viewport โดย:
+
+- หน้าเว็บต้องไม่เกิด Horizontal Scrolling
+- Primary Actions ต้องยังมองเห็นและเข้าถึงได้
+
+## Data Rules
+
+ใช้เฉพาะ synthetic/mock data ที่อยู่ใน Repository หรือ synthetic data ที่สร้างขึ้นสำหรับ User Story นี้เท่านั้น
+
+ห้ามใช้ข้อมูลผู้ป่วยจริง
+
+Mock data ต้องรองรับอย่างน้อย:
+
+- HN `65000123` → Somchai Jaidee
+- ค้นหา `Jaidee` → พบผู้ป่วยมากกว่าหนึ่งคน
+- Empty search result
+- Search failure
+- Delayed response สำหรับแสดง Loading state
 
 ## Out of Scope
 
-- การ implement backend
-- Database schema หรือ SQL
-- การเชื่อมต่อ HIS จริง
-- การ implement authentication / authorization
-- การเชื่อมต่อ FHIR
-- การ deploy ขึ้น production
+User Story นี้ไม่รวม:
+
+- Backend implementation
+- Database หรือ SQL
+- HIS integration
+- Queue allocation หรือ Queue Management จริง
+- Authentication / Authorization
+- FHIR integration
+- การเขียนข้อมูลเข้าสู่ Clinical System จริง
+- Production deployment
