@@ -116,6 +116,12 @@ Training convention:
 
 **1 Issue = 1 Branch = 1 Worktree.** Resume the same issue and worktree across agent sessions when needed; inspect the issue and current diff before continuing.
 
+Carry the issue number through every checkpoint (example: issue `12`):
+
+- **Branch name** — `feature/<issue-number>-<slug>`, e.g. `feature/12-us001-patient-checkin`.
+- **Commit footer** — end commit messages with `Refs #<issue-number>`, e.g. `Refs #12`.
+- **MR body** — include `Closes #<issue-number>`, e.g. `Closes #12`.
+
 Never modify `main` directly for feature work. Never use force push as part of normal training guidance.
 
 Before handoff, help the human understand:
