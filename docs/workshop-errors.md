@@ -9,6 +9,7 @@ Ask the AI agent to create a temporary training branch/change where a component 
 Expected evidence:
 - TypeScript / build error in the terminal.
 - File and property name are visible in the error.
+- The dev server may keep rendering the page anyway: the affected field silently shows blank instead of failing visibly. Run `npm run build` (or `npx tsc --noEmit`) to surface the error — a running dev page alone can hide it.
 
 Learning goal:
 - Read error type → message → file → line.
@@ -33,6 +34,10 @@ Run the development server in two worktrees using the same port.
 
 Expected evidence:
 - The second process reports that the port is already in use (or chooses another port depending on tooling).
+
+How to fix:
+- Stop the process holding the port: `lsof -ti:3000 | xargs kill` (Storybook: `lsof -ti:6006 | xargs kill`).
+- Killing the `npm run dev` wrapper can leave the underlying `next` child process still holding the port — kill by port, not by wrapper.
 
 Learning goal:
 - Understand that worktrees separate files/branches but running processes still share machine resources such as ports.
