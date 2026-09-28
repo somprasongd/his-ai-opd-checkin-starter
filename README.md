@@ -74,7 +74,7 @@ git switch main
 git pull
 
 git worktree add ../wt-us001-patient-checkin \
-  -b feature/12-us001-patient-checkin main
+  -b feature/1-us001-patient-checkin main
 
 cd ../wt-us001-patient-checkin
 git status
@@ -87,7 +87,7 @@ Training convention:
 
 You can resume the same issue and worktree in later agent sessions. Reopen the issue and inspect the current diff before continuing.
 
-`12` is an example issue number. Replace it with your own issue number everywhere: branch name, commit footer (`Refs #12`), and MR body (`Closes #12`). Start from a clean `main`; the worktree directory can keep the neutral `wt-us001-patient-checkin` name.
+`1` is an example issue number — on a fresh repository, the US-001 issue is usually your first. Replace it with your own issue number everywhere: branch name, commit footer (`Refs #1`), and MR body (`Closes #1`). Start from a clean `main`; the worktree directory can keep the neutral `wt-us001-patient-checkin` name.
 
 ## GitLab self-hosted
 
