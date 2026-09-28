@@ -9,7 +9,7 @@ Ask the AI agent to create a temporary training branch/change where a component 
 Expected evidence:
 - TypeScript / build error in the terminal.
 - File and property name are visible in the error.
-- The dev server may keep rendering the page anyway: the affected field silently shows blank instead of failing visibly. Run `npm run build` (or `npx tsc --noEmit`) to surface the error — a running dev page alone can hide it.
+- The dev server may keep rendering the page anyway: the affected field silently shows blank instead of failing visibly. Run `npm run build` (or `npx next typegen && npx tsc --noEmit`; `next-env.d.ts` is git-ignored, so a fresh clone needs `next typegen` before `tsc`) to surface the error — a running dev page alone can hide it.
 
 Learning goal:
 - Read error type → message → file → line.
